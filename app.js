@@ -44,6 +44,15 @@ let flights = [{
     remarks: "CANCELD"
 },]
 
+// 
+
+
+
+// dinamic data 
+const destination = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antiguamp; Barbuda"]
+const remarks = ["ONTIME", "REMARKED", "CANCELD"]
+let hour = 15
+
 function populateTable() {
     for (const flight of flights) {
         const tableRow = document.createElement('tr')    //table row creation
@@ -63,15 +72,12 @@ function populateTable() {
                     letterElement.classList.add('flip')
                     letterElement.innerText = letter
                     tableCell.append(letterElement)
-                }, 100 * index)
+                }, 300 * index)
 
                 tableRow.append(tableCell)
 
             }
 
-
-
-            console.log("array", word)
         }
 
         tableBody.append(tableRow)
@@ -79,4 +85,61 @@ function populateTable() {
     }
 
 }
+
+// adding new objects to flights array
+function suffle() {
+
+    flights.shift()
+    flights.push({
+        time: generateTime(),
+        destination: destination[Math.floor(Math.random() * destination.length)],
+        flight: generateRandomLetter() + "" + generateRandomLetter() + " " + generateRandomNumber(),
+        gate: generateRandomLetter() + " " + generateRandomNumber() + "" + generateRandomNumber(),
+        remarks: remarks[Math.floor(Math.random() * remarks.length)]
+    })
+
+    tableBody.textContent = ""
+    populateTable()
+
+}
+
+
+//  random letter
+
+function generateRandomLetter() {
+    const alaphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    return alaphabets.charAt(Math.floor(Math.random() * alaphabets.length))
+}
+// random number
+
+function generateRandomNumber(maxNumber) {
+    const nums = "0123456789"
+    if (maxNumber) {
+
+        const newNumber = nums.slice(0, maxNumber)
+        return newNumber.charAt(Math.floor(Math.random() * newNumber.length))
+    }
+    return nums.charAt(Math.floor(Math.random() * nums.length))
+}
+
+// time random
+function generateTime() {
+    let displayHour = hour
+    if (hour < 24) {
+        hour++
+        displayHour = hour
+    }
+    if (hour <= 24) {
+        hour = 1
+        displayHour = hour
+    }
+    if (hour < 10) {
+        displayHour = "0" + hour
+    }
+    return displayHour + ":" + generateRandomNumber(5) + generateRandomNumber()
+}
+
+
+// function calls
 populateTable()
+setInterval(suffle,3000)
